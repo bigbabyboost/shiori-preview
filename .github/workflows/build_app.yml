@@ -10,6 +10,8 @@ on:
       dry-run:
         description: Creates a draft release (any value would create a draft)
         required: false
+permissions:
+  contents: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.inputs.git-ref }}
