@@ -20,7 +20,7 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: 'komikku-app/komikku'
+          repository: 'bigbabyboost/komikku'
           ref: 'master'
 
       - name: Validate Gradle Wrapper
@@ -39,19 +39,16 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Write google-services.json
-        uses: DamianReeves/write-file-action@6929a9a6d1807689191dcc8bbe62b54d70a32b42 # v1.3
-        with:
-          path: app/google-services.json
-          contents: ${{ secrets.GOOGLE_SERVICES_JSON }}
-          write-mode: overwrite
+      - name: Load Google Service file
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA | base64 -di > app/google-services.json
 
-      - name: Write client_secrets.json
-        uses: DamianReeves/write-file-action@6929a9a6d1807689191dcc8bbe62b54d70a32b42 # v1.3
-        with:
-          path: app/src/main/assets/client_secrets.json
-          contents: ${{ secrets.GOOGLE_CLIENT_SECRETS_JSON }}
-          write-mode: overwrite
+      - name: Load Client Secrets file
+        env:
+          DATA: ${{ secrets.CLIENT_SECRETS_JSON }}
+        run: mkdir -p app/src/main/assets echo $DATA | base64 -di > app/src/main/assets/client_secrets.json
+
 
       - name: Set up gradle
         uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
